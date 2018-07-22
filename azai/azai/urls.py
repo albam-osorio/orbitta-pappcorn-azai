@@ -15,7 +15,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.urls import include
+from django.conf import settings
+from django.conf.urls import url
+from django.conf.urls.static import static
+from django.views.generic import RedirectView
+from . import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('', RedirectView.as_view(url='/azai', permanent=True)),
+    path('azai/', views.HomePageView.as_view(), name='home'),
+    path('azai/admin/', admin.site.urls),
+    path('azai/users/', include('users.urls')),
+    path('azai/accounts/', include('django.contrib.auth.urls')),
 ]
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
