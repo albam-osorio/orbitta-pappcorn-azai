@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, UserManager
+from django.contrib.auth.models import AbstractUser, UserManager, Group
 from django.utils.translation import ugettext_lazy as _
 
 # Create your models here.
@@ -32,6 +32,9 @@ class UsuarioManager(UserManager):
 
     def create_user(self, email, password=None, **extra_fields):
         """Crea y guarda un usuario regular con el correo electrónico y la contraseña especificados."""
+        if not password:
+            password = self.make_random_password()
+        
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
         
@@ -58,11 +61,35 @@ class Usuario(AbstractUser):
     """
 
     email = models.EmailField(_('email address'), unique=True) # changes email to unique and blank to false
+    numero_identificacion = models.CharField(_('número identificación'), max_length=10, unique=True, blank=False, null=False)
+    telefono = models.CharField(_('teléfono'), max_length=50, blank=False, null=False)
+
+    groups = models.ForeignKey(
+        Group,
+        verbose_name=_('grupo'),
+        on_delete=models.PROTECT, 
+        null=True,
+        help_text=_(
+            'The groups this user belongs to. A user will get all permissions '
+            'granted to each of their groups.'
+        ),
+    )
+
+    ocupacion = models.ForeignKey(
+        Ocupacion, 
+        verbose_name=_('grupo'), 
+        on_delete=models.PROTECT, 
+        null=True,
+        help_text=_(''),
+    )
+
+    fecha_creacion = models.DateTimeField(_('creado'), auto_now_add=True)
+    fecha_modificacion = models.DateTimeField(_('modificado'), auto_now=True)
 
     objects = UsuarioManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = [] # removes email from REQUIRED_FIELDS
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'numero_identificacion', 'telefono' ] # removes email from REQUIRED_FIELDS
 
     # numero_identificacion = models.CharField(max_length=10, blank=False, null=False)
     # telefono = models.CharField(max_length=50, blank=False, null=False)
