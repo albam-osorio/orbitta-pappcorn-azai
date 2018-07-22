@@ -2,11 +2,30 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ugettext_lazy as _
 from .models import (Ocupacion, Usuario)
+from .forms import (CustomUserCreationForm, CustomUserChangeForm)
 
 @admin.register(Usuario)
 class UsuarioAdmin(UserAdmin):
     """Defina el modelo de administrador para el modelo de usuario personalizado sin campo username."""
-    pass
+    list_display = ('get_full_name', 'ocupacion', 'email', 'fecha_modificacion')
+    list_filter = ()
+
+    add_form = CustomUserCreationForm
+    add_fieldsets = (
+        (_('Información básica'), {
+            'fields': (('grupo', 'email')),
+        }),
+        (_('Datos personales'), {
+            'classes': ('wide',),
+            'fields': (('first_name', 'last_name'), 'numero_identificacion', 'telefono', 'ocupacion'),
+        }),
+    )
+
+    form = CustomUserChangeForm
+
+
+
+
     # fieldsets = (
     #     (None, {'fields': ('email', 'password')}),
     #     (_('Personal info'), {'fields': ('first_name', 'last_name')}),
@@ -25,11 +44,8 @@ class UsuarioAdmin(UserAdmin):
     # ordering = ('email',)
 
     # # The forms to add and change user instances
-    # add_form = CustomUserCreationForm
-    # form = CustomUserChangeForm
 
-    # list_display = ('nombres', 'ocupacion', 'email', 'fecha_modificacion')
-    # list_filter = ()
+
 
     # # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # # overrides get_fieldsets to use this attribute when creating a user.

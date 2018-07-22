@@ -64,7 +64,7 @@ class Usuario(AbstractUser):
     numero_identificacion = models.CharField(_('número identificación'), max_length=10, unique=True, blank=False, null=False)
     telefono = models.CharField(_('teléfono'), max_length=50, blank=False, null=False)
 
-    groups = models.ForeignKey(
+    grupo = models.ForeignKey(
         Group,
         verbose_name=_('grupo'),
         on_delete=models.PROTECT, 
@@ -77,7 +77,6 @@ class Usuario(AbstractUser):
 
     ocupacion = models.ForeignKey(
         Ocupacion, 
-        verbose_name=_('grupo'), 
         on_delete=models.PROTECT, 
         null=True,
         help_text=_(''),

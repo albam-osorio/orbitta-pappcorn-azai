@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth import password_validation
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.utils.translation import ugettext_lazy as _
 from .models import Usuario
 
 
@@ -13,18 +13,16 @@ class CustomUserCreationForm(forms.ModelForm):
     }
 
     email = forms.EmailField(
-        _('email address'),
+        label = _('email address'),
         widget=forms.EmailInput(attrs={'placeholder': 'Correo'})
     )
     numero_identificacion = forms.CharField(
-        _('número identificación'), 
-        widget=forms.TextInput(
-        attrs={'placeholder': 'Número identificación'})
+        label = _('número identificación'), 
+        widget=forms.TextInput(attrs={'placeholder': 'Número identificación'})
     )
     telefono = forms.CharField(
-        _('teléfono'), 
-        widget=forms.TextInput(
-        attrs={'placeholder': 'Teléfono'})
+        label = _('teléfono'), 
+        widget=forms.TextInput(attrs={'placeholder': 'Teléfono'})
     )
 
     class Meta:
@@ -50,6 +48,6 @@ class CustomUserChangeForm(forms.ModelForm):
     """
 
     class Meta:
-        model = User
+        model = Usuario
         fields = ('grupo', 'email', 'first_name', 'last_name',
-                  'numero_identificacion', 'telefono', 'ocupacion', 'is_active', 'is_admin')
+                  'numero_identificacion', 'telefono', 'ocupacion', 'is_active', 'is_staff')
