@@ -45,7 +45,7 @@ class UsuarioAdmin(UserAdmin):
     # search_fields = ()
     # ordering = ('email',)
     
-    # filter_horizontal = ()
+    filter_horizontal = ()
 
 # Register your models here.
 admin.site.register(Ocupacion)
